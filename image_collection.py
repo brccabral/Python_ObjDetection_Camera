@@ -150,3 +150,24 @@ if not os.path.exists(os.path.join(paths['APIMODEL_PATH'], 'research', 'object_d
 !python {files['TF_RECORD_SCRIPT']} -x {os.path.join(paths['IMAGE_PATH'], 'train')} -l {files['LABELMAP']} -o {os.path.join(paths['ANNOTATION_PATH'], 'train.record')} 
 !python {files['TF_RECORD_SCRIPT']} -x {os.path.join(paths['IMAGE_PATH'], 'test')} -l {files['LABELMAP']} -o {os.path.join(paths['ANNOTATION_PATH'], 'test.record')}
 # %%
+paths['PRETRAINED_MODEL_PATH']
+# %%
+paths['CHECKPOINT_PATH']
+# %%
+if os.name =='posix':
+    !cp {os.path.join(paths['PRETRAINED_MODEL_PATH'], PRETRAINED_MODEL_NAME, 'pipeline.config')} {os.path.join(paths['CHECKPOINT_PATH'])}
+if os.name == 'nt':
+    !copy {os.path.join(paths['PRETRAINED_MODEL_PATH'], PRETRAINED_MODEL_NAME, 'pipeline.config')} {os.path.join(paths['CHECKPOINT_PATH'])}
+
+# %%
+import tensorflow as tf
+from object_detection.utils import config_util
+from object_detection.protos import pipeline_pb2
+from google.protobuf import text_format
+
+# %%
+config = config_util.get_configs_from_pipeline_file(files['PIPELINE_CONFIG'])
+
+# %%
+config
+# %%
