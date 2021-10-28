@@ -1,0 +1,26 @@
+<annotation>
+	<folder>livelong</folder>
+	<filename>livelong.a29e60f6-3819-11ec-9674-f39702fe470d.jpg</filename>
+	<path>/media/brccabral/Data/PythonProjects/ObjectDetection/Tensorflow/workspace/images/collectedimages/livelong/livelong.a29e60f6-3819-11ec-9674-f39702fe470d.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>480</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>LiveLong</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>151</xmin>
+			<ymin>187</ymin>
+			<xmax>404</xmax>
+			<ymax>480</ymax>
+		</bndbox>
+	</object>
+</annotation>
