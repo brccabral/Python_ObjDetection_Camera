@@ -1,6 +1,11 @@
 # pip install opencv-python
 # pip install --upgrade pyqt5 lxml
 # pip install labelImg
+# pip install pandas
+# pip install tensorflow-gpu
+# pip install pillow
+# sudo apt-get install protobuf-compiler
+
 # %%
 # Import opencv
 import cv2 
@@ -132,4 +137,16 @@ with open(files['LABELMAP'], 'w') as f:
         f.write('\tid:{}\n'.format(label['id']))
         f.write('}\n')
 
+# %%
+if not os.path.exists(files['TF_RECORD_SCRIPT']):
+    !git clone https://github.com/nicknochnack/GenerateTFRecord {paths['SCRIPTS_PATH']}
+
+# %%
+if not os.path.exists(os.path.join(paths['APIMODEL_PATH'], 'research', 'object_detection')):
+    !git clone https://github.com/tensorflow/models {paths['APIMODEL_PATH']}
+    !cd Tensorflow/models/research && protoc object_detection/protos/*.proto --python_out=. && cp object_detection/packages/tf2/setup.py . && python -m pip install . 
+
+# %%
+!python {files['TF_RECORD_SCRIPT']} -x {os.path.join(paths['IMAGE_PATH'], 'train')} -l {files['LABELMAP']} -o {os.path.join(paths['ANNOTATION_PATH'], 'train.record')} 
+!python {files['TF_RECORD_SCRIPT']} -x {os.path.join(paths['IMAGE_PATH'], 'test')} -l {files['LABELMAP']} -o {os.path.join(paths['ANNOTATION_PATH'], 'test.record')}
 # %%
