@@ -74,4 +74,8 @@ ARCHIVE_PATH = os.path.join('Tensorflow', 'workspace', 'images', 'archive.tar.gz
 # move files to respective folders
 
 # %%
+!pwd
+# %%
 !tar -czf {ARCHIVE_PATH} {TRAIN_PATH} {TEST_PATH}
+
+# %%
