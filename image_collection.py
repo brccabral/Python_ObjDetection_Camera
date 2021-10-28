@@ -63,3 +63,15 @@ if not os.path.exists(LABELIMG_PATH):
 !cd {LABELIMG_PATH} && python labelImg.py
 
 # %%
+TRAIN_PATH = os.path.join('Tensorflow', 'workspace', 'images', 'train')
+!mkdir {TRAIN_PATH}
+TEST_PATH = os.path.join('Tensorflow', 'workspace', 'images', 'test')
+!mkdir {TEST_PATH}
+ARCHIVE_PATH = os.path.join('Tensorflow', 'workspace', 'images', 'archive.tar.gz')
+
+# select 4 images/labels from each folder for training
+# the other image/label is for test
+# move files to respective folders
+
+# %%
+!tar -czf {ARCHIVE_PATH} {TRAIN_PATH} {TEST_PATH}
