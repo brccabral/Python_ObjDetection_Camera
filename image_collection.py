@@ -1,10 +1,11 @@
-# pip install opencv-python
+# pip install opencv-contrib-python
 # pip install --upgrade pyqt5 lxml
 # pip install labelImg
 # pip install pandas
 # pip install tensorflow-gpu
 # pip install pillow
 # sudo apt-get install protobuf-compiler
+# sudo apt-get install libgtk2.0-dev pkg-config
 
 # %%
 # Import opencv
