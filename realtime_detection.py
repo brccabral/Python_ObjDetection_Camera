@@ -54,7 +54,7 @@ def detect_fn(image):
 import cv2 
 import numpy as np
 from matplotlib import pyplot as plt
-%matplotlib inline
+# %matplotlib inline
 
 # %%
 category_index = label_map_util.create_category_index_from_labelmap(files['LABELMAP'])
@@ -96,10 +96,10 @@ plt.show()
 
 # %%
 cap = cv2.VideoCapture(0)
-width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+# width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+# height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-while cap.isOpened(): 
+while cap.isOpened():
     ret, frame = cap.read()
     image_np = np.array(frame)
     
