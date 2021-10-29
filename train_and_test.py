@@ -60,7 +60,17 @@ VERIFICATION_SCRIPT = os.path.join(paths['APIMODEL_PATH'], 'research', 'object_d
 # %%
 !cd {paths['PRETRAINED_MODEL_PATH']} && tar -zxvf {PRETRAINED_MODEL_NAME+'.tar.gz'}
 # %%
-labels = [{'name':'ThumbsUp', 'id':1}, {'name':'ThumbsDown', 'id':2}, {'name':'ThankYou', 'id':3}, {'name':'LiveLong', 'id':4}]
+labels = [
+        {'name':'GoDown', 'id':1}
+        ,{'name':'Heart', 'id':2}
+        ,{'name':'LiveLong', 'id':3}
+        ,{'name':'Peace', 'id':4}
+        ,{'name':'Pray', 'id':5}
+        ,{'name':'Rock', 'id':6}
+        ,{'name':'ThumbsDown', 'id':7}
+        ,{'name':'ThumbsUp', 'id':8}
+        ,{'name':'GoUp', 'id':9}
+        ]
 
 with open(files['LABELMAP'], 'w') as f:
     for label in labels:
