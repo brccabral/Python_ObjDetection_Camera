@@ -124,6 +124,16 @@ for path in paths.values():
 # %%
 # download model from PRETRAINED_MODEL_URL
 
+# %%
+if not os.path.exists(os.path.join(paths['APIMODEL_PATH'], 'research', 'object_detection')):
+    !git clone https://github.com/tensorflow/models {paths['APIMODEL_PATH']}
+    !cd Tensorflow/models/research && protoc object_detection/protos/*.proto --python_out=. && cp object_detection/packages/tf2/setup.py . && python -m pip install . 
+
+# %%
+VERIFICATION_SCRIPT = os.path.join(paths['APIMODEL_PATH'], 'research', 'object_detection', 'builders', 'model_builder_tf2_test.py')
+# Verify Installation
+!python {VERIFICATION_SCRIPT}
+
 !mv {PRETRAINED_MODEL_NAME+'.tar.gz'} {paths['PRETRAINED_MODEL_PATH']}
 # %%
 !cd {paths['PRETRAINED_MODEL_PATH']} && tar -zxvf {PRETRAINED_MODEL_NAME+'.tar.gz'}
@@ -142,13 +152,9 @@ if not os.path.exists(files['TF_RECORD_SCRIPT']):
     !git clone https://github.com/nicknochnack/GenerateTFRecord {paths['SCRIPTS_PATH']}
 
 # %%
-if not os.path.exists(os.path.join(paths['APIMODEL_PATH'], 'research', 'object_detection')):
-    !git clone https://github.com/tensorflow/models {paths['APIMODEL_PATH']}
-    !cd Tensorflow/models/research && protoc object_detection/protos/*.proto --python_out=. && cp object_detection/packages/tf2/setup.py . && python -m pip install . 
-
-# %%
 !python {files['TF_RECORD_SCRIPT']} -x {os.path.join(paths['IMAGE_PATH'], 'train')} -l {files['LABELMAP']} -o {os.path.join(paths['ANNOTATION_PATH'], 'train.record')} 
 !python {files['TF_RECORD_SCRIPT']} -x {os.path.join(paths['IMAGE_PATH'], 'test')} -l {files['LABELMAP']} -o {os.path.join(paths['ANNOTATION_PATH'], 'test.record')}
+
 # %%
 paths['PRETRAINED_MODEL_PATH']
 # %%
@@ -193,3 +199,27 @@ with tf.io.gfile.GFile(files['PIPELINE_CONFIG'], "wb") as f:
     f.write(config_text)
 
 # %%
+TRAINING_SCRIPT = os.path.join(paths['APIMODEL_PATH'], 'research', 'object_detection', 'model_main_tf2.py')
+
+# %%
+# this command does the training
+NUM_STEPS = 2000
+command = "python {} --model_dir={} --pipeline_config_path={} --num_train_steps={}".format(TRAINING_SCRIPT, paths['CHECKPOINT_PATH'],files['PIPELINE_CONFIG'],NUM_STEPS)
+command
+# python Tensorflow/models/research/object_detection/model_main_tf2.py --model_dir=Tensorflow/workspace/models/my_ssd_mobnet --pipeline_config_path=Tensorflow/workspace/models/my_ssd_mobnet/pipeline.config --num_train_steps=2000
+# model_dir = location of pipeline.config
+
+# %%
+!{command}
+# %%
+# this command is just to show the Precision and Recall tables
+command = "python {} --model_dir={} --pipeline_config_path={} --checkpoint_dir={}".format(TRAINING_SCRIPT, paths['CHECKPOINT_PATH'],files['PIPELINE_CONFIG'], paths['CHECKPOINT_PATH'])
+command
+# python Tensorflow/models/research/object_detection/model_main_tf2.py --model_dir=Tensorflow/workspace/models/my_ssd_mobnet --pipeline_config_path=Tensorflow/workspace/models/my_ssd_mobnet/pipeline.config --checkpoint_dir=Tensorflow/workspace/models/my_ssd_mobnet
+
+# %%
+!{command}
+# %%
+!tensorboard --logdir=Tensorflow/workspace/models/my_ssd_mobnet/train
+# %%
+!tensorboard --logdir=Tensorflow/workspace/models/my_ssd_mobnet/eval
