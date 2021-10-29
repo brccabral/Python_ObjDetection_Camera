@@ -53,14 +53,17 @@ def detect_fn(image):
 # %%
 import cv2 
 import numpy as np
+import matplotlib
+matplotlib.use('TkAgg')
 from matplotlib import pyplot as plt
 # %matplotlib inline
 
 # %%
 category_index = label_map_util.create_category_index_from_labelmap(files['LABELMAP'])
 # %%
-IMAGE_FILE = 'livelong.a5091066-3819-11ec-9674-f39702fe470d.jpg'
+IMAGE_FILE = 'down.f8b5fe7e-38da-11ec-9674-f39702fe470d.jpg'
 IMAGE_PATH = os.path.join(paths['IMAGE_PATH'], 'test', IMAGE_FILE)
+
 
 # %%
 img = cv2.imread(IMAGE_PATH)
@@ -130,7 +133,7 @@ while cap.isOpened():
 
     cv2.imshow('object detection',  cv2.resize(image_np_with_detections, (800, 600)))
     
-    if cv2.waitKey(10) & 0xFF == ord('q'):
+    if cv2.waitKey(1) & 0xFF == ord('q'):
         cap.release()
         cv2.destroyAllWindows()
         break

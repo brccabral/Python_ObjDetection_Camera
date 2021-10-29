@@ -1,16 +1,36 @@
 item { 
-	name:'ThumbsUp'
+	name:'GoDown'
 	id:1
 }
 item { 
-	name:'ThumbsDown'
+	name:'Heart'
 	id:2
 }
 item { 
-	name:'ThankYou'
+	name:'LiveLong'
 	id:3
 }
 item { 
-	name:'LiveLong'
+	name:'Peace'
 	id:4
+}
+item { 
+	name:'Pray'
+	id:5
+}
+item { 
+	name:'Rock'
+	id:6
+}
+item { 
+	name:'ThumbsDown'
+	id:7
+}
+item { 
+	name:'ThumbsUp'
+	id:8
+}
+item { 
+	name:'GoUp'
+	id:9
 }
