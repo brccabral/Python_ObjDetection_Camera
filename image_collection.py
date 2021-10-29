@@ -16,9 +16,11 @@ import uuid
 import os
 # Import time
 import time
+from math import floor
 # %%
-labels = ['thumbsup', 'thumbsdown', 'thankyou', 'livelong']
-number_imgs = 5
+labels = ['thumbsup', 'thumbsdown', 'peace', 'livelong', 'rock', 'up', 'down', 'heart', 'pray']
+MAX_LABELS = len(labels)
+COUNTDOWN_SECONDS = 5
 
 # %%
 IMAGES_PATH = os.path.join('Tensorflow', 'workspace', 'images', 'collectedimages')
@@ -35,47 +37,80 @@ for label in labels:
         !mkdir {path}
 
 # %%
+def collect_image(cap: cv2.VideoCapture, imgnum: int, label: str, path: str):
+    print('Collecting image {} for {}'.format(imgnum, label))
+    ret, frame = cap.read()
+    imgname = os.path.join(path,label,label+'.'+'{}.jpg'.format(str(uuid.uuid1())))
+    cv2.imwrite(imgname, frame)
+    cv2.imshow('frame', frame)
+
+# %%
+print('Press s to save image')
+print('Press c to start a {} seconds countdown'.format(COUNTDOWN_SECONDS))
+print('Press n to move to next label')
+print('Press q to quit')
+# if cap.isOpened():
+#     cap.release()
+#     cv2.destroyAllWindows()
+
 cap = cv2.VideoCapture(0)
+imgnum = 0
+current_label = 0
+print('Collecting images for {}'.format(labels[current_label]))
+is_countdown = False
 while cap.isOpened():
-    for label in labels:
-        collecting = True
-        print('Collecting images for {}'.format(label))
+    ret, frame = cap.read()
+    cv2.imshow('frame', frame)
+    key = cv2.waitKey(1)
+
+    # move to next label
+    if key & 0xFF == ord('n'):
+        current_label += 1
         imgnum = 0
-        print('Press s to save image {}'.format(imgnum))
+        if current_label >= MAX_LABELS:
+            print('No more labels to collect')
+            break
+        print('Collecting images for {}'.format(labels[current_label]))
+
+    # save at any time by pressing s
+    if key & 0xFF == ord('s'):
+        collect_image(cap, imgnum, labels[current_label], IMAGES_PATH)
+        imgnum+=1
+        print('Press s to save or c for countdown - image {} for {}'.format(imgnum, labels[current_label]))
+
+    # start a countdown to save
+    if key & 0xFF == ord('c'):
         starttime = time.time()
         prevtime = 0
-        while collecting and cap.isOpened():
-            ret, frame = cap.read()
-            cv2.imshow('frame', frame)
-            triggertime = time.time()
-            timedif = round(triggertime-starttime)
-            if timedif != prevtime:
-                print(10-timedif)
-                prevtime=timedif
-
-            if cv2.waitKey(1) & 0xFF == ord('s') or timedif>10:
-                print('Collecting image {}'.format(imgnum))
-                ret, frame = cap.read()
-                imgname = os.path.join(IMAGES_PATH,label,label+'.'+'{}.jpg'.format(str(uuid.uuid1())))
-                cv2.imwrite(imgname, frame)
-                cv2.imshow('frame', frame)
-                imgnum+=1
-                starttime = time.time()
-                if imgnum >= number_imgs:
-                    collecting = False
-                else:
-                    print('Press s to save image {}'.format(imgnum))
-
-
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                cap.release()
-                cv2.destroyAllWindows()
-                break
-        if not cap.isOpened():
-            break
-    if cap.isOpened():
+        is_countdown = True
+        print(f"{key=} {starttime=}")
+    
+    # check if countdown has started
+    if is_countdown:
+        triggertime = time.time()
+        timedif = floor(triggertime-starttime)
+        # print the countdown for user
+        if timedif != prevtime:
+            print(COUNTDOWN_SECONDS-timedif)
+            prevtime=timedif
+        # save after 5 seconds
+        if timedif >= COUNTDOWN_SECONDS:
+            collect_image(cap, imgnum, labels[current_label], IMAGES_PATH)
+            imgnum+=1
+            print('Press s to save or c for countdown - image {} for {}'.format(imgnum, labels[current_label]))
+            # stops countdown
+            is_countdown = False
+    
+    # quit anytime
+    if key & 0xFF == ord('q'):
         cap.release()
         cv2.destroyAllWindows()
+        break
+    if not cap.isOpened():
+        break
+if cap.isOpened():
+    cap.release()
+    cv2.destroyAllWindows()
 
 # %%
 LABELIMG_PATH = os.path.join('Tensorflow', 'labelimg')
@@ -85,7 +120,8 @@ if not os.path.exists(LABELIMG_PATH):
     !mkdir {LABELIMG_PATH}
 
 # %%
-!cd {LABELIMG_PATH} && python labelImg.py
+# add labels for each image using this "app"
+# !cd {LABELIMG_PATH} && python labelImg.py
 
 # %%
 TRAIN_PATH = os.path.join('Tensorflow', 'workspace', 'images', 'train')
