@@ -1,4 +1,5 @@
 .venv*/
-Tensorflow/workspace/images/collectedimages/*
-Tensorflow/workspace/images/train/*
-Tensorflow/workspace/images/test/*
+Tensorflow/workspace/images/*
+Tensorflow/workspace/models/*/*/*.v2
+Tensorflow/workspace/pre-trained-models/*
+.vscode/*

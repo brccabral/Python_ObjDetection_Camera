@@ -38,7 +38,15 @@ for label in labels:
 
 # %%
 def collect_image(cap: cv2.VideoCapture, imgnum: int, label: str, path: str):
-    print('Collecting image {} for {}'.format(imgnum, label))
+    """Save current frame to file
+
+    Args:
+        cap (cv2.VideoCapture): Video stream
+        imgnum (int): Image counter
+        label (str): Image label
+        path (str): Image save location
+    """
+    print('Collecting image {} for {}'.format(imgnum+1, label))
     ret, frame = cap.read()
     imgname = os.path.join(path,label,label+'.'+'{}.jpg'.format(str(uuid.uuid1())))
     cv2.imwrite(imgname, frame)
@@ -76,7 +84,7 @@ while cap.isOpened():
     if key & 0xFF == ord('s'):
         collect_image(cap, imgnum, labels[current_label], IMAGES_PATH)
         imgnum+=1
-        print('Press s to save or c for countdown - image {} for {}'.format(imgnum, labels[current_label]))
+        print('Press s to save or c for countdown or n for next label - image {} for {}'.format(imgnum, labels[current_label]))
 
     # start a countdown to save
     if key & 0xFF == ord('c'):
@@ -97,7 +105,7 @@ while cap.isOpened():
         if timedif >= COUNTDOWN_SECONDS:
             collect_image(cap, imgnum, labels[current_label], IMAGES_PATH)
             imgnum+=1
-            print('Press s to save or c for countdown - image {} for {}'.format(imgnum, labels[current_label]))
+            print('Press s to save or c for countdown or n for next label - image {} for {}'.format(imgnum, labels[current_label]))
             # stops countdown
             is_countdown = False
     
