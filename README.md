@@ -16,6 +16,6 @@ sudo apt-get install libgtk2.0-dev pkg-config
 ```
 
 Run `image_collection.py`. It will open your camera and you can save frames using `s` or `c` for a countdown.  
-Use `Tensorflow\labelimg.py` to open saved images and select the object. It will create a `.xml` with the object coordinates.  
+Use `Tensorflow\labelimg\labelimg.py` to open saved images and select the object. It will create a `.xml` with the object coordinates.
 Run `train_and_test.py`.  
 Run `realtime_detection.py`.  
